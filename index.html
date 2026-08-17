@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Canteen Order System</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 30px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
+        input, select, button { display: block; width: 100%; margin: 10px 0; padding: 10px; box-sizing: border-box; }
+        button { background-color: #28a745; color: white; border: none; font-weight: bold; cursor: pointer; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    </style>
+</head>
+<body>
+
+    <h2>Campus Canteen Order System</h2>
+    
+    <form id="orderForm">
+        <input type="text" id="name" placeholder="Student ID / Name" required>
+        <select id="item">
+            <option value="Chicken Singara">Chicken Singara (Tk 20)</option>
+            <option value="Beef Samosa">Beef Samosa (Tk 25)</option>
+            <option value="Cold Coffee">Cold Coffee (Tk 50)</option>
+        </select>
+        <input type="number" id="qty" min="1" value="1" placeholder="Quantity" required>
+        <button type="submit">Place Order</button>
+    </form>
+
+    <h3>Recent Orders</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Item</th>
+                <th>Qty</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody id="orderTable"></tbody>
+    </table>
+
+    <script>
+        const priceList = { "Chicken Singara": 20, "Beef Samosa": 25, "Cold Coffee": 50 };
+
+        document.getElementById('orderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const item = document.getElementById('item').value;
+            const qty = parseInt(document.getElementById('qty').value);
+            const total = priceList[item] * qty;
+
+            const tbody = document.getElementById('orderTable');
+            const row = `<tr>
+                <td>${name}</td>
+                <td>${item}</td>
+                <td>${qty}</td>
+                <td>Tk ${total}</td>
+            </tr>`;
+            tbody.innerHTML += row;
+            this.reset();
+        });
+    </script>
+</body>
+</html>
