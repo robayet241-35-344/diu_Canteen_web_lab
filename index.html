@@ -5,61 +5,129 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Campus Canteen Order System</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 600px; margin: 30px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
+        body { font-family: Arial, sans-serif; max-width: 650px; margin: 30px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
         input, select, button { display: block; width: 100%; margin: 10px 0; padding: 10px; box-sizing: border-box; }
-        button { background-color: #28a745; color: white; border: none; font-weight: bold; cursor: pointer; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .btn-add { background-color: #007bff; color: white; border: none; font-weight: bold; cursor: pointer; }
+        .btn-order { background-color: #28a745; color: white; border: none; font-weight: bold; cursor: pointer; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
         th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        .cart-section { background: #f9f9f9; padding: 15px; border-radius: 5px; margin-top: 15px; }
     </style>
 </head>
 <body>
 
     <h2>Campus Canteen Order System</h2>
     
-    <form id="orderForm">
-        <input type="text" id="name" placeholder="Student ID / Name" required>
-        <select id="item">
+    <input type="text" id="name" placeholder="Student ID / Name" required>
+    
+    <div style="display: flex; gap: 10px;">
+        <select id="item" style="flex: 2;">
             <option value="Chicken Singara">Chicken Singara (Tk 20)</option>
-            <option value="Beef Samosa">Beef Samosa (Tk 25)</option>
+            <option value="Samosa">Samosa (Tk 25)</option>
             <option value="Cold Coffee">Cold Coffee (Tk 50)</option>
+            <option value="Noodles">Noodles (Tk 50)</option>
+            <option value="Puri">Puri (Tk 50)</option>
+            <option value="Ice Cream">Ice Cream (Tk 50)</option>
         </select>
-        <input type="number" id="qty" min="1" value="1" placeholder="Quantity" required>
-        <button type="submit">Place Order</button>
-    </form>
+        <input type="number" id="qty" min="1" value="1" style="flex: 1;" required>
+    </div>
+    <button type="button" class="btn-add" onclick="addToCart()">Add to Cart</button>
 
+    <!-- Cart View -->
+    <div class="cart-section">
+        <h3>Your Cart</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Qty</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody id="cartTable"></tbody>
+        </table>
+        <h4>Total: Tk <span id="cartTotal">0</span></h4>
+        <button type="button" class="btn-order" onclick="placeOrder()">Place Order</button>
+    </div>
+
+    <!-- Recent Orders -->
     <h3>Recent Orders</h3>
     <table>
         <thead>
             <tr>
                 <th>Name</th>
-                <th>Item</th>
-                <th>Qty</th>
-                <th>Total</th>
+                <th>Items Ordered</th>
+                <th>Grand Total</th>
             </tr>
         </thead>
         <tbody id="orderTable"></tbody>
     </table>
 
     <script>
-        const priceList = { "Chicken Singara": 20, "Beef Samosa": 25, "Cold Coffee": 50 };
+        const priceList = { 
+            "Chicken Singara": 20, 
+            "Samosa": 25, 
+            "Cold Coffee": 50,
+            "Noodles": 50,
+            "Puri": 50,
+            "Ice Cream": 50 
+        };
 
-        document.getElementById('orderForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const name = document.getElementById('name').value;
+        let cart = [];
+
+        function addToCart() {
             const item = document.getElementById('item').value;
             const qty = parseInt(document.getElementById('qty').value);
-            const total = priceList[item] * qty;
+            const price = priceList[item] * qty;
 
-            const tbody = document.getElementById('orderTable');
-            const row = `<tr>
+            cart.push({ item, qty, price });
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const cartTable = document.getElementById('cartTable');
+            cartTable.innerHTML = '';
+            let total = 0;
+
+            cart.forEach(c => {
+                total += c.price;
+                cartTable.innerHTML += `<tr>
+                    <td>${c.item}</td>
+                    <td>${c.qty}</td>
+                    <td>Tk ${c.price}</td>
+                </tr>`;
+            });
+
+            document.getElementById('cartTotal').innerText = total;
+        }
+
+        function placeOrder() {
+            const name = document.getElementById('name').value;
+            if (!name) {
+                alert('Please enter Student ID / Name!');
+                return;
+            }
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+
+            const itemsSummary = cart.map(c => `${c.item} (x${c.qty})`).join(', ');
+            const grandTotal = document.getElementById('cartTotal').innerText;
+
+            const orderTable = document.getElementById('orderTable');
+            orderTable.innerHTML += `<tr>
                 <td>${name}</td>
-                <td>${item}</td>
-                <td>${qty}</td>
-                <td>Tk ${total}</td>
+                <td>${itemsSummary}</td>
+                <td>Tk ${grandTotal}</td>
             </tr>`;
-            tbody.innerHTML += row;
-            this.reset();
-        });
+
+            // Reset Cart & Form
+            cart = [];
+            updateCartUI();
+            document.getElementById('name').value = '';
+            document.getElementById('qty').value = '1';
+        }
     </script>
 </body>
 </html>
