@@ -1,94 +1,65 @@
-# Campus Canteen Order System
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Canteen Order System</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 30px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
+        input, select, button { display: block; width: 100%; margin: 10px 0; padding: 10px; box-sizing: border-box; }
+        button { background-color: #28a745; color: white; border: none; font-weight: bold; cursor: pointer; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    </style>
+</head>
+<body>
 
-A simple full-stack project: React (frontend) + Node.js/Express (backend) + MySQL (database).
+    <h2>Campus Canteen Order System</h2>
+    
+    <form id="orderForm">
+        <input type="text" id="name" placeholder="Student ID / Name" required>
+        <select id="item">
+            <option value="Chicken Singara">Chicken Singara (Tk 20)</option>
+            <option value="Beef Samosa">Beef Samosa (Tk 25)</option>
+            <option value="Cold Coffee">Cold Coffee (Tk 50)</option>
+        </select>
+        <input type="number" id="qty" min="1" value="1" placeholder="Quantity" required>
+        <button type="submit">Place Order</button>
+    </form>
 
-## Folder structure
+    <h3>Recent Orders</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Item</th>
+                <th>Qty</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody id="orderTable"></tbody>
+    </table>
 
-```
-canteen-app/
-├── .gitignore
-├── README.md
-├── backend/
-│   ├── controllers/
-│   │   └── orderController.js
-│   ├── routes/
-│   │   └── orderRoutes.js
-│   ├── .env.example
-│   ├── db.js
-│   ├── server.js
-│   ├── schema.sql
-│   └── package.json
-└── frontend/
-    ├── index.html
-    ├── vite.config.js
-    ├── package.json
-    └── src/
-        ├── components/
-        │   ├── Navbar.jsx
-        │   ├── ItemList.jsx
-        │   ├── OrderForm.jsx
-        │   └── OrderList.jsx
-        ├── App.jsx
-        ├── App.css
-        └── main.jsx
-```
+    <script>
+        const priceList = { "Chicken Singara": 20, "Beef Samosa": 25, "Cold Coffee": 50 };
 
-## How it works (in short)
+        document.getElementById('orderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const item = document.getElementById('item').value;
+            const qty = parseInt(document.getElementById('qty').value);
+            const total = priceList[item] * qty;
 
-1. React (`OrderForm.jsx`) sends the order to Express with `fetch()`.
-2. Express (`orderController.js`) runs an `INSERT` into MySQL and **waits** for it to finish.
-3. Only after the insert succeeds does Express reply back to React.
-4. React then calls `GET /api/orders` again, which reads the fresh data straight from MySQL.
-5. The "Recent Orders" table re-renders with the new row — no page reload needed.
-
-So the table is never showing fake/temporary data — every row you see came from a real `SELECT` on the database, run right after the `INSERT` completed.
-
-## Setup
-
-### 1. Database
-```bash
-mysql -u root -p < backend/schema.sql
-```
-This creates the `canteen_db` database and the `orders` table.
-
-### 2. Backend
-```bash
-cd backend
-npm install
-cp .env.example .env
-```
-Open `.env` and put in your own MySQL username/password, then:
-```bash
-npm start
-```
-Runs on **http://localhost:5000**
-
-### 3. Frontend
-```bash
-cd frontend
-npm install
-npm run dev
-```
-Runs on **http://localhost:5173**
-
-Open that URL in your browser — place an order and watch it appear in the table.
-
-## API Endpoints
-
-| Method | Endpoint      | Description        |
-|--------|---------------|---------------------|
-| GET    | /api/orders   | Get all orders      |
-| POST   | /api/orders   | Place a new order   |
-
-## Uploading to GitHub
-
-From the `canteen-app` folder:
-```bash
-git init
-git add .
-git commit -m "Initial commit - Campus Canteen Order System"
-git branch -M main
-git remote add origin <your-empty-github-repo-url>
-git push -u origin main
-```
-The `.gitignore` file already excludes `node_modules/` and `.env`, so your MySQL password stays private and the repo stays small. Anyone cloning it just needs to follow the Setup steps above with their own `.env`.
+            const tbody = document.getElementById('orderTable');
+            const row = `<tr>
+                <td>${name}</td>
+                <td>${item}</td>
+                <td>${qty}</td>
+                <td>Tk ${total}</td>
+            </tr>`;
+            tbody.innerHTML += row;
+            this.reset();
+        });
+    </script>
+</body>
+</html>
