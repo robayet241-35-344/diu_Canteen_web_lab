@@ -1,6 +1,3 @@
-// server.js
-// Starting point of the backend - sets up Express, middleware, and routes.
-
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
