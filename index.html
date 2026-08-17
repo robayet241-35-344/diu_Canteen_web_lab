@@ -23,11 +23,11 @@
     <div style="display: flex; gap: 10px;">
         <select id="item" style="flex: 2;">
             <option value="Chicken Singara">Chicken Singara (Tk 20)</option>
-            <option value="Samosa">Samosa (Tk 25)</option>
-            <option value="Cold Coffee">Cold Coffee (Tk 50)</option>
-            <option value="Noodles">Noodles (Tk 50)</option>
-            <option value="Puri">Puri (Tk 50)</option>
-            <option value="Ice Cream">Ice Cream (Tk 50)</option>
+            <option value="Samosa">Samosa (Tk 15)</option>
+            <option value="Cold Coffee">Cold Coffee (Tk 40)</option>
+            <option value="Noodles">Noodles (Tk 35)</option>
+            <option value="Puri">Puri (Tk 10)</option>
+            <option value="Ice Cream">Ice Cream (Tk 100)</option>
         </select>
         <input type="number" id="qty" min="1" value="1" style="flex: 1;" required>
     </div>
@@ -66,11 +66,11 @@
     <script>
         const priceList = { 
             "Chicken Singara": 20, 
-            "Samosa": 25, 
-            "Cold Coffee": 50,
-            "Noodles": 50,
-            "Puri": 50,
-            "Ice Cream": 50 
+            "Samosa": 15, 
+            "Cold Coffee": 40,
+            "Noodles": 35,
+            "Puri": 10,
+            "Ice Cream": 100 
         };
 
         let cart = [];
