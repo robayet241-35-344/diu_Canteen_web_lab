@@ -1,7 +1,3 @@
--- schema.sql
--- Run this once in MySQL to set up the database and table.
--- Command: mysql -u root -p < schema.sql
-
 CREATE DATABASE IF NOT EXISTS canteen_db;
 
 USE canteen_db;
