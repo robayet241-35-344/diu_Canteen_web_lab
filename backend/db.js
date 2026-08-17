@@ -1,7 +1,3 @@
-// db.js
-// Sets up a connection pool to MySQL using values from the .env file.
-// A pool reuses a few open connections instead of opening a new one per query.
-
 require('dotenv').config();
 const mysql = require('mysql2/promise');
 
